@@ -1,19 +1,25 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Deck {
 
-    int amountOfDecks;
 
     List<Card> deckOfCards;
 
-    public Deck(int amount){
-        amountOfDecks = amount;
+    public Deck(){
         deckOfCards = new ArrayList<>();
+
     }
 
     public void shuffleDeck(){
-        //todo
+        List<Card> newDeck = new ArrayList<>();
+
+        while(deckOfCards.size() > 0){
+            int newIndex = (int) (Math.random() * deckOfCards.size());
+            newDeck.add(deckOfCards.remove(newIndex));
+        }
+            deckOfCards = newDeck;
     }
 
     public Card getCard(){

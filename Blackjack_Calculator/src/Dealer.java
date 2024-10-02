@@ -3,7 +3,7 @@ import java.util.List;
 public class Dealer{
 
     List<Deck> decks;
-
+    int amountOfDecks;
     public Dealer(List<Deck> decks){
         this.decks = decks;
     }
