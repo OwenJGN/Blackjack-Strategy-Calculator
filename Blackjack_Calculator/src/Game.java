@@ -43,8 +43,10 @@ public class Game {
         System.out.println();
         newDealer = new Dealer(createDecks(selectAmountOfDecks()));
         player = new Player(selectPlayerBalance());
-
-
+        initialSetup();
+        displayPlayerOptions();
+        displayBestOption();
+        //TODO: GET THE PLAYERS CHOICE FOR HIT STAND SPLIT OR DOUBLE DOWN
 
 
     }
@@ -54,7 +56,8 @@ public class Game {
         newDealer.dealCardToDealer();
         newDealer.dealCardToPlayer(player);
         newDealer.dealCardToDealer();
-
+        displayCurrentGame();
+        displayPlayerOptions();
     }
 
     public void displayCurrentGame(){
@@ -70,6 +73,9 @@ public class Game {
         }
     }
 
+    public void displayBestOption(){
+        System.out.println("Current best option is: ");
+    }
     public void displayPlayerOptions(){
         displayBreakLine();
         System.out.println("1. HIT");
