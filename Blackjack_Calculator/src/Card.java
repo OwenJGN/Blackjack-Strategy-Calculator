@@ -1,7 +1,7 @@
 public class Card {
 
-    enum Suit { Hearts, Diamonds, Spades, Clubs}
-    enum Value {
+    public enum Suit { Hearts, Diamonds, Spades, Clubs}
+    public enum Value {
         TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN,
         JACK, QUEEN, KING, ACE;
     }
@@ -38,4 +38,11 @@ public class Card {
     public String getSuit(){
         return this.suit.toString();
     }
+
+    public String getSuitAndValue(){
+        return this.suit.toString() + ": " + this.value.toString();
+    }
+
+
+
 }

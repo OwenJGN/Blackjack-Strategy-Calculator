@@ -6,7 +6,8 @@ public class Game {
 
     Scanner sc = new Scanner(System.in);
     Dealer newDealer;
-
+    Player player;
+    boolean isHandFinished = false;
     public void startGame(){
         displayMenu();
         String response = sc.nextLine().strip();
@@ -40,9 +41,47 @@ public class Game {
     public void playGame(){
         System.out.println("You have selected to play a game");
         System.out.println();
-        createDecks(selectAmountOfDecks());
-        Player p = new Player(selectPlayerBalance());
+        newDealer = new Dealer(createDecks(selectAmountOfDecks()));
+        player = new Player(selectPlayerBalance());
 
+
+
+
+    }
+    public void initialSetup(){
+        newDealer.shuffleDecks();
+        newDealer.dealCardToPlayer(player);
+        newDealer.dealCardToDealer();
+        newDealer.dealCardToPlayer(player);
+        newDealer.dealCardToDealer();
+
+    }
+
+    public void displayCurrentGame(){
+        System.out.println("Dealers' Hand:");
+        System.out.println("FLIPPED     ");
+        System.out.print(newDealer.getDealerHand().getCardAtIndex(1).getSuitAndValue());
+        System.out.println();
+        System.out.println();
+        System.out.println("Players' Hand:");
+        System.out.println();
+        for(Card c : player.getPlayerHand().getAllCards()){
+            System.out.print(c.getSuitAndValue() + "     ");
+        }
+    }
+
+    public void displayPlayerOptions(){
+        displayBreakLine();
+        System.out.println("1. HIT");
+        System.out.println("2. STAND");
+        System.out.println("3. SPLIT");
+        System.out.println("#4. DOUBLE DOWN");
+        displayBreakLine();
+    }
+    public void gameLoop(){
+        while(!isHandFinished){
+
+        }
     }
     public void enterManually(){
         System.out.println("You have selected to enter cards in manually");
@@ -104,13 +143,13 @@ public class Game {
         System.out.println("______________________________");
     }
 
-    public void createDecks(int amount){
+    public List<Deck> createDecks(int amount){
         List<Deck> decks = new ArrayList<>();
         for(int i = 0; i< amount;i++){
             Deck deck = new Deck();
             decks.add(deck);
         }
-        newDealer = new Dealer(decks);
+       return decks;
     }
 
 }

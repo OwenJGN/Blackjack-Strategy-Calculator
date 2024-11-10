@@ -4,21 +4,35 @@ public class Dealer{
 
     List<Deck> decks;
     int amountOfDecks;
+    Hand dealerHand;
     public Dealer(List<Deck> decks){
         this.decks = decks;
+        this.dealerHand = new Hand();
     }
 
-    public void shuffleDecks(List<Deck> decks){
-        for (Deck d: decks) {
+    public void shuffleDecks(){
+        for (Deck d: this.decks) {
             d.shuffleDeck();
         }
     }
 
-    public void dealCard(Player p){
-        p.addCardToHand(decks.get(0).getCard());
+    public void dealCardToPlayer(Player p){
+        Card c = decks.get(0).getCard();
+        p.addCardToHand(c);
+
+    }
+
+    public void dealCardToDealer() {
+        Card c = decks.get(0).getCard();
+        this.dealerHand.addCard(c);
     }
     
     public void play(){
 
     }
+    public Hand getDealerHand(){
+        return this.dealerHand;
+    }
+
+
 }

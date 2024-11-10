@@ -35,5 +35,13 @@ public class Hand {
         }
         return false;
     }
+
+    public Card getCardAtIndex(int i){
+        return currentHand.get(i);
+    }
+
+    public List<Card> getAllCards(){
+        return this.currentHand;
+    }
 }
 

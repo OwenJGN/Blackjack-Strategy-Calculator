@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class Deck {
+public class Deck{
 
 
     List<Card> deckOfCards;
@@ -10,6 +10,11 @@ public class Deck {
     public Deck(){
         deckOfCards = new ArrayList<>();
 
+        for (Card.Suit s : Card.Suit.values()) {
+            for(Card.Value v : Card.Value.values()){
+                deckOfCards.add(new Card(s, v));
+            }
+        }
     }
 
     public void shuffleDeck(){

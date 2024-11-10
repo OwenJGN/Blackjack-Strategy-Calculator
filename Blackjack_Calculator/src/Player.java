@@ -6,6 +6,7 @@ public class Player {
 
     public Player(int balance){
         playerBalance = balance;
+        this.playerHand = new Hand();
     }
 
     public int getPlayerBalance(){
@@ -49,6 +50,9 @@ public class Player {
         playerHand.clearHand();
     }
 
+    public Hand getPlayerHand(){
+        return this.playerHand;
+    }
     public void hit(){
 
     }
