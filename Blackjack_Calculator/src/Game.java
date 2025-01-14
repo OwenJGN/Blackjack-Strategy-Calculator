@@ -54,6 +54,7 @@ public class Game {
     }
     public void initialSetup(){
         getBetAmount();
+        player.setIsInitialChoice(true);
         newDealer.shuffleDecks();
         newDealer.dealCardToPlayer(player);
         newDealer.dealCardToDealer();
@@ -87,15 +88,22 @@ public class Game {
         }
     }
     public void displayCurrentGame(){
+        for (Card c :newDealer.getDealerHand().getAllCards()) {
+            System.out.println(c.getSuitAndValue());
+        }
+        System.out.println();
+        for (Card c :player.getPlayerHand().getAllCards()) {
+            System.out.println(c.getSuitAndValue());
+        }
+
         displayBreakLine();
         System.out.println("Current wager: " + player.getCurrentBet());
         System.out.println(ANSI_YELLOW +"Dealers' Hand:");
-        System.out.println("FLIPPED");
-        System.out.print(newDealer.getDealerHand().getCardAtIndex(0).getSuitAndValue());
+        System.out.print("FLIPPED     ");
+        System.out.print(newDealer.getDealerHand().getCardAtIndex(1).getSuitAndValue());
         System.out.println();
         System.out.println();
         System.out.println(ANSI_GREEN + "Players' Hand:");
-        System.out.println();
         for(Card c : player.getPlayerHand().getAllCards()){
             System.out.print(c.getSuitAndValue() + "     ");
         }
@@ -107,21 +115,24 @@ public class Game {
     }
     public void displayPlayerOptions(){
         displayBreakLine();
-        System.out.println("1. HIT");
-        System.out.println("2. STAND");
-        System.out.println("3. SPLIT");
-        System.out.println("4. DOUBLE DOWN");
+        System.out.println("HIT");
+        System.out.println("STAND");
+        if(player.canDoubleBet() && player.getIsInitialChoice()){
+            if(player.getPlayerHand().canSplit()){
+                System.out.println("SPLIT");
+            }
+            System.out.println("DOUBLE DOWN");
+        }
+
     }
 
 
     public void gameLoop(){
         while(true){
-
             initialSetup();
             displayBestOption();
             displayPlayerOptions();
             getPlayerChoice();
-            //TODO: GET THE PLAYERS CHOICE FOR HIT STAND SPLIT OR DOUBLE DOWN
         }
     }
     public void enterManually(){
@@ -145,24 +156,17 @@ public class Game {
                 player.stand();
                 break;
 
-            } else if (choice.equals("SPLIT")) {
-                player.split();
-                break;
-
-            } else if (choice.equals("DOUBLE DOWN")){
-                if((player.currentBet * 2) > player.playerBalance){
-                    System.out.println("ERROR: Insufficient funds to double down");
-                    displayBreakLine();
-                    sc.nextLine();
-                    continue;
+            } else if (player.canDoubleBet() && player.getIsInitialChoice()){
+                if(player.getPlayerHand().canSplit() && choice.equals("SPLIT")){
+                    player.split();
+                    break;
+                } else if(choice.equals("DOUBLE DOWN")){
+                    player.doubleDown();
+                    break;
                 }
-                player.doubleDown();
-                break;
-
             }
             System.out.println("ERROR: Invalid input");
             displayBreakLine();
-            sc.nextLine();
         }
 
     }
@@ -220,13 +224,13 @@ public class Game {
         System.out.println("______________________________");
     }
 
-    public List<Deck> createDecks(int amount){
-        List<Deck> decks = new ArrayList<>();
-        for(int i = 0; i< amount;i++){
-            Deck deck = new Deck();
-            decks.add(deck);
+    public Deck createDecks(int amount){
+        Deck d = new Deck();
+        for(int i = 0; i< amount -1;i++){
+            Deck temp = new Deck();
+            d.addCards(temp.getAllCards());
         }
-       return decks;
+        return d;
     }
 
 }

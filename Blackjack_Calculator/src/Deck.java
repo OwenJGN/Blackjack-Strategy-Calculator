@@ -4,11 +4,11 @@ import java.util.Random;
 
 public class Deck{
 
-
     List<Card> deckOfCards;
-
+    List<Card> cardsInPlay;
     public Deck(){
         deckOfCards = new ArrayList<>();
+        cardsInPlay = new ArrayList<>();
 
         for (Card.Suit s : Card.Suit.values()) {
             for(Card.Value v : Card.Value.values()){
@@ -35,6 +35,26 @@ public class Deck{
         for (Card c : cards) {
             deckOfCards.add(c);
         }
+    }
+
+    public void addCardInPlay(Card c){
+        deckOfCards.remove(c);
+        cardsInPlay.add(c);
+    }
+
+    public void resetDeck(){
+        for (Card C : cardsInPlay){
+            deckOfCards.add(C);
+        }
+        cardsInPlay.clear();
+    }
+
+    public int getCardCount(){
+        return deckOfCards.size();
+    }
+
+    public List<Card> getAllCards(){
+        return deckOfCards;
     }
 
 }

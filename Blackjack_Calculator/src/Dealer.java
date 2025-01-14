@@ -2,37 +2,43 @@ import java.util.List;
 
 public class Dealer{
 
-    List<Deck> decks;
-    int amountOfDecks;
+    Deck deck;
     Hand dealerHand;
-    public Dealer(List<Deck> decks){
-        this.decks = decks;
+    public Dealer(Deck deck){
+        this.deck = deck;
         this.dealerHand = new Hand();
     }
 
     public void shuffleDecks(){
-        for (Deck d: this.decks) {
-            d.shuffleDeck();
-        }
+        deck.resetDeck();
+        deck.shuffleDeck();
     }
 
     public void dealCardToPlayer(Player p){
-        Card c = decks.get(0).getCard();
+        Card c = deck.getCard();
         p.addCardToHand(c);
-
+        deck.addCardInPlay(c);
     }
 
     public void dealCardToDealer() {
-        Card c = decks.get(0).getCard();
+        Card c = deck.getCard();
         this.dealerHand.addCard(c);
-    }
-    
-    public void play(){
+        deck.addCardInPlay(c);
 
     }
+
     public Hand getDealerHand(){
         return this.dealerHand;
     }
 
+    public int getCardAmount(){
+        int amount=0;
+        amount+=deck.getCardCount();
+        return amount;
+    }
+
+    public void resetDecks(){
+        deck.resetDeck();
+    }
 
 }

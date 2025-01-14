@@ -4,9 +4,11 @@ public class Player {
     int playerBalance = 100;
     int currentBet;
 
+    boolean isInitialChoice;
     public Player(int balance){
         playerBalance = balance;
         this.playerHand = new Hand();
+        isInitialChoice = true;
     }
 
     public int getPlayerBalance(){
@@ -47,26 +49,41 @@ public class Player {
     }
 
     public Hand getPlayerHand(){
-
         return this.playerHand;
     }
     public void hit(){
-
+        isInitialChoice = false;
     }
 
     public void stand(){
-
+        isInitialChoice = false;
     }
 
     public void split(){
-
+        isInitialChoice = false;
     }
 
     public void doubleDown(){
+        isInitialChoice = false;
 
     }
 
     public int getCurrentBet() {
         return currentBet;
+    }
+
+    public boolean canDoubleBet(){
+        if(currentBet * 2 <= playerBalance){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean getIsInitialChoice(){
+        return isInitialChoice;
+    }
+
+    public void setIsInitialChoice(boolean b){
+        isInitialChoice= b;
     }
 }
