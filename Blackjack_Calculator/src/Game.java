@@ -4,10 +4,15 @@ import java.util.Scanner;
 
 public class Game {
 
+    public static final String ANSI_RESET = "\u001B[0m";
+
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+
     Scanner sc = new Scanner(System.in);
     Dealer newDealer;
     Player player;
-    boolean isHandFinished = false;
+
     public void startGame(){
         displayMenu();
         String response = sc.nextLine().strip();
@@ -43,34 +48,58 @@ public class Game {
         System.out.println();
         newDealer = new Dealer(createDecks(selectAmountOfDecks()));
         player = new Player(selectPlayerBalance());
-        initialSetup();
-        displayPlayerOptions();
-        displayBestOption();
-        //TODO: GET THE PLAYERS CHOICE FOR HIT STAND SPLIT OR DOUBLE DOWN
+        gameLoop();
 
 
     }
     public void initialSetup(){
+        getBetAmount();
         newDealer.shuffleDecks();
         newDealer.dealCardToPlayer(player);
         newDealer.dealCardToDealer();
         newDealer.dealCardToPlayer(player);
         newDealer.dealCardToDealer();
         displayCurrentGame();
-        displayPlayerOptions();
     }
 
+    public void getBetAmount(){
+        while(true){
+            System.out.println("How much would you like to bet?");
+            if(sc.hasNextInt()){
+                int betAmount = sc.nextInt();
+                if(betAmount > player.getPlayerBalance()){
+                    System.out.println("ERROR: Insufficient balance");
+                    displayBreakLine();
+                    sc.nextLine();
+                    continue;
+                } else if (betAmount <= 0) {
+                    System.out.println("ERROR: Must put up a positive bet amount");
+                    displayBreakLine();
+                    sc.nextLine();
+                    continue;
+                }
+                player.placeBet(betAmount);
+                break;
+            }
+            System.out.println("ERROR: Invalid input");
+            displayBreakLine();
+            sc.nextLine();  // Clear invalid input
+        }
+    }
     public void displayCurrentGame(){
-        System.out.println("Dealers' Hand:");
-        System.out.println("FLIPPED     ");
-        System.out.print(newDealer.getDealerHand().getCardAtIndex(1).getSuitAndValue());
+        displayBreakLine();
+        System.out.println("Current wager: " + player.getCurrentBet());
+        System.out.println(ANSI_YELLOW +"Dealers' Hand:");
+        System.out.println("FLIPPED");
+        System.out.print(newDealer.getDealerHand().getCardAtIndex(0).getSuitAndValue());
         System.out.println();
         System.out.println();
-        System.out.println("Players' Hand:");
+        System.out.println(ANSI_GREEN + "Players' Hand:");
         System.out.println();
         for(Card c : player.getPlayerHand().getAllCards()){
             System.out.print(c.getSuitAndValue() + "     ");
         }
+        System.out.println(ANSI_RESET);
     }
 
     public void displayBestOption(){
@@ -81,12 +110,18 @@ public class Game {
         System.out.println("1. HIT");
         System.out.println("2. STAND");
         System.out.println("3. SPLIT");
-        System.out.println("#4. DOUBLE DOWN");
-        displayBreakLine();
+        System.out.println("4. DOUBLE DOWN");
     }
-    public void gameLoop(){
-        while(!isHandFinished){
 
+
+    public void gameLoop(){
+        while(true){
+
+            initialSetup();
+            displayBestOption();
+            displayPlayerOptions();
+            getPlayerChoice();
+            //TODO: GET THE PLAYERS CHOICE FOR HIT STAND SPLIT OR DOUBLE DOWN
         }
     }
     public void enterManually(){
@@ -96,6 +131,41 @@ public class Game {
 
     }
 
+    public void getPlayerChoice(){
+        sc.nextLine();
+        while(true){
+            System.out.println("Enter in your choice (HIT, STAND, SPLIT, DOUBLE DOWN)");
+            String choice = sc.nextLine().toUpperCase().trim();
+
+            if(choice.equals("HIT")){
+                player.hit();
+                break;
+
+            } else if (choice.equals("STAND")) {
+                player.stand();
+                break;
+
+            } else if (choice.equals("SPLIT")) {
+                player.split();
+                break;
+
+            } else if (choice.equals("DOUBLE DOWN")){
+                if((player.currentBet * 2) > player.playerBalance){
+                    System.out.println("ERROR: Insufficient funds to double down");
+                    displayBreakLine();
+                    sc.nextLine();
+                    continue;
+                }
+                player.doubleDown();
+                break;
+
+            }
+            System.out.println("ERROR: Invalid input");
+            displayBreakLine();
+            sc.nextLine();
+        }
+
+    }
     public int selectAmountOfDecks() {
 
         int[] validDecks = {1, 2, 4, 6, 8};  // Valid deck options
@@ -116,9 +186,9 @@ public class Game {
     }
 
     public int selectPlayerBalance() {
-
+        sc.nextLine();
         while (true) {
-            System.out.println("Would you like to start with the default balance (100) or enter your own? (Y/N)");
+            System.out.println("Would you like to start with the default balance (100) (or enter your own)? (Y/N)");
             String answer = sc.nextLine().trim().toUpperCase();
 
             if (answer.equals("Y")) {
@@ -131,6 +201,7 @@ public class Game {
             }
         }
 
+        sc.nextLine();
         while (true) {
             System.out.println("Enter balance amount (up to 10,000,000):");
             if (sc.hasNextInt()) {

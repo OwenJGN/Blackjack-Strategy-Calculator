@@ -18,18 +18,14 @@ public class Player {
     }
 
     public void placeBet(int amount){
-        if(amount <= playerBalance){
-            removeBalance(amount);
-            currentBet = amount;
-        }else {
-            System.out.println("ERROR: Can't bet more than you have available");
-        }
+        currentBet = amount;
     }
 
     public void winBet(){
         playerBalance += currentBet *2;
         currentBet = 0;
     }
+
 
     public void loseBet(){
         currentBet = 0;
@@ -51,6 +47,7 @@ public class Player {
     }
 
     public Hand getPlayerHand(){
+
         return this.playerHand;
     }
     public void hit(){
@@ -67,5 +64,9 @@ public class Player {
 
     public void doubleDown(){
 
+    }
+
+    public int getCurrentBet() {
+        return currentBet;
     }
 }
